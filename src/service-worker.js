@@ -62,12 +62,12 @@ registerRoute(
   })
 );
 
-// var deferredEvent;
-// self.addEventListener("beforeinstallprompt", (e) => {
-//   console.log('beforeinstallprompt fired')
-//   e.preventDefault();
-//   deferredEvent = e;
-// });
+var deferredEvent;
+self.addEventListener("beforeinstallprompt", (e) => {
+  console.log('beforeinstallprompt fired')
+  e.preventDefault();
+  deferredEvent = e;
+});
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
@@ -78,7 +78,7 @@ self.addEventListener("message", (event) => {
   }
   if (event.data && event.data.type === "INSTALL") {
     console.log("message received from post message INSTALL");
-    // deferredEvent.prompt()
+    deferredEvent.prompt()
   }
 });
 

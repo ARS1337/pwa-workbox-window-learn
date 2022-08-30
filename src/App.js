@@ -41,7 +41,7 @@ function App() {
     window.addEventListener("load", () => {
       setTimeout(() => {
         setAllServiceWorkers();
-        setBeforeInstallEventListener();
+        // setBeforeInstallEventListener();
       }, 2000);
     });
   }, []);
@@ -61,8 +61,8 @@ function App() {
 
   const handleInstall = () => {
     try {
-      // activeServiceWorker.postMessage({ type: "INSTALL" });
-      deferredEvent.prompt()
+      activeServiceWorker.postMessage({ type: "INSTALL" });
+      // deferredEvent.prompt()
     } catch (err) {
       console.log("error in handleInstall",err);
     }
