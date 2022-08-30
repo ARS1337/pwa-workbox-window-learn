@@ -8,30 +8,40 @@ import Page3 from "./Pages/Page3";
 
 function App() {
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
+  const [activeServiceWorker, setActiveServiceWorker] = useState(null);
   const [showUpdateButton, setShowUpdateButton] = useState(false);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [deferredEvent, setDeferredEvent] = useState(null);
 
   const setAllServiceWorkers = async () => {
     try {
-      console.log("setAllServiceWorkers called");
       let waitingWorker = await navigator.serviceWorker
         .getRegistration()
         .then((res) => {
-          console.log("res ", res);
+          setActiveServiceWorker(res.active);
           return res.waiting || null;
         });
       setWaitingServiceWorker(waitingWorker);
       window.waitingWorker = waitingWorker;
-      console.log("dfgvdfgfddfdgdgdfgd waitingWorkerwaitingWorkerwaitingWorker", waitingWorker);
       waitingWorker && setShowUpdateButton(true);
     } catch (err) {
       console.log("err ", err);
     }
   };
 
+  const setBeforeInstallEventListener = () => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      console.log("beforeinstallprompt fired");
+      e.preventDefault();
+      setDeferredEvent(e)
+    });
+  };
+
   useEffect(() => {
     window.addEventListener("load", () => {
       setTimeout(() => {
         setAllServiceWorkers();
+        setBeforeInstallEventListener();
       }, 2000);
     });
   }, []);
@@ -42,13 +52,21 @@ function App() {
       if (waitingServiceWorker) {
         waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
         setShowUpdateButton(false);
+        setActiveServiceWorker(waitingServiceWorker);
       }
     } catch (err) {
       console.log("error in handleUpdate666 ", err);
     }
   };
 
-  console.log("showUpdateButtwerewo j", showUpdateButton);
+  const handleInstall = () => {
+    try {
+      // activeServiceWorker.postMessage({ type: "INSTALL" });
+      deferredEvent.prompt()
+    } catch (err) {
+      console.log("error in handleInstall",err);
+    }
+  };
 
   return (
     <div>
@@ -68,6 +86,7 @@ function App() {
           </p>
         </div>
       )}
+      <button onClick={handleInstall}>Install</button>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="Page2" element={<Page2 />} />
