@@ -20,9 +20,9 @@ function App() {
           return res.waiting || null;
         });
       setWaitingServiceWorker(waitingWorker);
-      window.waitingWorker=waitingWorker
-      console.log("waitingWorker ", waitingWorker);
-      waitingWorker  && setShowUpdateButton(true);
+      window.waitingWorker = waitingWorker;
+      console.log("dfgvdfgfddfdgdgdfgd waitingWorkerwaitingWorkerwaitingWorker", waitingWorker);
+      waitingWorker && setShowUpdateButton(true);
     } catch (err) {
       console.log("err ", err);
     }
@@ -30,7 +30,9 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("load", () => {
-      setAllServiceWorkers();
+      setTimeout(() => {
+        setAllServiceWorkers();
+      }, 2000);
     });
   }, []);
 
@@ -42,16 +44,16 @@ function App() {
         setShowUpdateButton(false);
       }
     } catch (err) {
-      console.log("error in handleUpdate ", err);
+      console.log("error in handleUpdate666 ", err);
     }
   };
 
-  console.log("showUpdateButto ", showUpdateButton);
+  console.log("showUpdateButtwerewo j", showUpdateButton);
 
   return (
     <div>
       <p> Header title</p>
-      {true && (
+      {showUpdateButton && (
         <div
           style={{
             display: "flex",
@@ -60,8 +62,10 @@ function App() {
             minWidth: "100%",
           }}
         >
-          <p>New Content is Available, update to find out</p>
-          <button onClick={handleUpdate}>update</button>
+          <p>
+            New Content is Available,{" "}
+            <button onClick={handleUpdate}>update</button> to find out
+          </p>
         </div>
       )}
       <Routes>
